@@ -1,5 +1,5 @@
 //
-//  SwiftUIView.swift
+//  AppStoreCatalogView.swift
 //  AppStoreCatalog
 //
 //  Created by Jack Nutting on 2025-07-23.
