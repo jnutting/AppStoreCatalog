@@ -11,15 +11,26 @@ struct ProductGroupView: View {
     let group: ProductGroup
     
     var body: some View {
-        Text(group.title)
-            .font(.title)
-        ForEach(group.products) { product in
-            ProductView(product: product)
+        GroupBox {
+            Text(group.title)
+                .font(.title)
+            LazyVGrid(columns: [
+                .init(.adaptive(minimum: 300, maximum: 600), spacing: 8)
+            ], spacing: 8) {
+                ForEach(group.products) { product in
+                    ProductView(product: product)
+                        .background(Color.white)
+                        .cornerRadius(16)
+                }
+            }
         }
     }
 }
 
 #Preview {
-    let group = ProductGroup(title: "Cool Group", products: [])
+    let product1 = Product(name: "Great Product", details: "This is such a cool app, you would not believe how amazing it is. This app will rock your world! This is such a cool app, you would not believe how amazing it is. This app will rock your world! This is such a cool app, you would not believe how amazing it is. This app will rock your world!", identifier: "12345678", imageURL: URL(string: "https://picsum.photos/200")!)
+    let product2 = Product(name: "Great Product", details: "This is such a cool app, you would not believe how amazing it is. This app will rock your world! This is such a cool app, you would not believe how amazing it is. This app will rock your world! This is such a cool app, you would not believe how amazing it is. This app will rock your world!", identifier: "12345678x", imageURL: URL(string: "https://picsum.photos/200")!)
+
+    let group = ProductGroup(title: "Cool Group", products: [product1, product2])
     ProductGroupView(group: group)
 }

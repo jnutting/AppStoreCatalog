@@ -12,10 +12,13 @@ public struct AppStoreCatalogView: View {
     
     public var body: some View {
         VStack {
-            ForEach (catalog.productGroups) { group in
-                ProductGroupView(group: group)
+            ScrollView {
+                ForEach (catalog.productGroups) { group in
+                    ProductGroupView(group: group)
+                        .cornerRadius(16)
+                }
             }
-            
+            Spacer()
         }
     }
     
@@ -36,6 +39,12 @@ public struct AppStoreCatalogView: View {
                 "imageURL" : "https://rebisoft.com/appicons/flippybit512.png"
             },
             {
+                "name" : "FlippyBit",
+                "details" : "Party like it's 1979! Flippy Bit takes the great action of early 2014, and makes it look like it's on an old Atari.",
+                "identifier" : "825459863x",
+                "imageURL" : "https://rebisoft.com/appicons/flippybit512.png"
+            },
+            {
                 "name" : "Scribattle",
                 "details" : "Put your finger-flicking abilities to the test in this all-but-forgotten 2009 App Store hit game!",
                 "identifier" : "301618970",
@@ -49,6 +58,12 @@ public struct AppStoreCatalogView: View {
                 "name" : "Goldy",
                 "details" : "Goldy is a web browser for iPhone, iPad, and iPod touch that offers one simple feature: Privacy.",
                 "identifier" : "417317449",
+                "imageURL" : "https://rebisoft.com/_Media/screen_shot_2011-08-19_at_med.png"
+            },
+            {
+                "name" : "Goldy",
+                "details" : "Goldy is a web browser for iPhone, iPad, and iPod touch that offers one simple feature: Privacy.",
+                "identifier" : "417317449x",
                 "imageURL" : "https://rebisoft.com/_Media/screen_shot_2011-08-19_at_med.png"
             },
         ]
