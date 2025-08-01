@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-let errorFillColor = Color.red.opacity(0.95)
+let errorFillColor = Color(red: 0.8, green: 0.1, blue: 0.1, opacity: 0.95)
 let errorStrokeColor = Color.red
 let errorStrokeStyle = StrokeStyle(
     lineWidth: 5,
@@ -30,47 +30,51 @@ struct ProductView: View {
         VStack {
             Text(product.name)
                 .font(.headline)
-            HStack(spacing: 16) {
-                AsyncImage(url: product.imageURL) { phase in
-                    if let image = phase.image {
-                        image
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 100, height: 100, alignment: .topLeading)
-                    } else if phase.error != nil {
-                        Image(packageResource: "failedIcon-noalpha", ofType: "png")
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 100, height: 100, alignment: .topLeading)
-                    } else { // placeholder during load
-                        ProgressView().progressViewStyle(.circular)
+            
+            ZStack {
+                HStack(spacing: 16) {
+                    AsyncImage(url: product.imageURL) { phase in
+                        if let image = phase.image {
+                            image
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 100, height: 100, alignment: .topLeading)
+                        } else if phase.error != nil {
+                            Image(packageResource: "failedIcon-noalpha", ofType: "png")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 100, height: 100, alignment: .topLeading)
+                        } else { // placeholder during load
+                            ProgressView().progressViewStyle(.circular)
                                 .frame(width: 100, height: 100)
+                        }
                     }
-                }
-                .cornerRadius(16)
-                
-                ZStack {
-                    Text(product.details)
+                    .cornerRadius(16)
                     
-                    Group {
-                        RoundedRectangle(cornerRadius: 16)
-                            .fill(errorFillColor)
-                            .stroke(
-                                errorStrokeColor,
-                                style: errorStrokeStyle
-                            )
-                        
-                        Text("App Store doesn't know this product")
-                            .foregroundStyle(.white)
-                            .padding(16)
-                    }
-                    .opacity(storeKitFailure ? 1 : 0)
-                    .animation(.snappy)
-                    .scaleEffect(storeKitFailure ? CGSize(width: 1.0, height: 1.0) : .init(width: 1.2, height: 1.2))
-                    .animation(.snappy)
+                    Text(product.details)
                 }
+                
+                Group {
+                    RoundedRectangle(cornerRadius: 16)
+                        .fill(errorFillColor)
+                        .stroke(
+                            errorStrokeColor,
+                            style: errorStrokeStyle
+                        )
+                    
+                    Text("App Store doesn't know this product")
+                        .foregroundStyle(.white)
+                        .font(.callout)
+                        .padding(16)
+                }
+                .opacity(storeKitFailure ? 1 : 0)
+                .animation(.snappy)
+                .scaleEffect(storeKitFailure ? CGSize(width: 1.0, height: 1.0) : .init(width: 1.2, height: 1.2))
+                .animation(.snappy)
+                
             }
             .frame(maxHeight: 120)
+            
         }
         .padding(16)
         .onTapGesture {
