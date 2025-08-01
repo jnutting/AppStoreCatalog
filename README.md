@@ -139,6 +139,6 @@ the app store for any reason, a message will be displayed to the user. You can
 also give AppStoreCatalogView a closure to be called whenever this happens, in
 case you want to log this in some way.
 
-Due to StoreKit limitations, every attempt to disaply a purchase page fails when
+Due to StoreKit limitations, every attempt to display a purchase page fails when
 running in the Simulator, so you'll see the failure message for every product.
 Run on a device to see it actually work. 
