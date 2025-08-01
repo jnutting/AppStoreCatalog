@@ -14,9 +14,8 @@ struct ProductGroupView: View {
         GroupBox {
             Text(group.title)
                 .font(.title)
-            LazyVGrid(columns: [
-                .init(.adaptive(minimum: 300, maximum: 600), spacing: 8)
-            ], spacing: 8) {
+            LazyVGrid(columns: [.init(.adaptive(minimum: 300, maximum: 600), spacing: 8)],
+                      spacing: 8) {
                 ForEach(group.products) { product in
                     ProductView(product: product)
                         .background(Color(UIColor.systemBackground))

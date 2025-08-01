@@ -62,7 +62,7 @@ struct ProductView: View {
                             style: errorStrokeStyle
                         )
                     
-                    Text("App Store doesn't know this product")
+                    Text("A product with the identifier \"\(product.identifier)\" couldn't be found on the App Store.")
                         .foregroundStyle(.white)
                         .font(.callout)
                         .padding(16)

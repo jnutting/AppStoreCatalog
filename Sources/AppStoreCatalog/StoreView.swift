@@ -57,7 +57,6 @@ class StoreViewController: UIViewController {
 
         storeController.loadProduct(withParameters: params) { success, error in
             if let error = error {
-                print("Error loading product view controller: \(error)")
                 self.dismiss(animated: true)
                 self.coordinator.productViewControllerDidFail(storeController)
             }
