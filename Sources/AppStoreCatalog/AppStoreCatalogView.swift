@@ -33,8 +33,20 @@ public struct AppStoreCatalogView: View {
     }
 
     public var body: some View {
+        var showCloseButton = vm.selectedProduct == nil
+        
         ZStack {
-            
+            VStack {
+                ScrollView {
+                    ForEach (catalog.productGroups) { group in
+                        ProductGroupView(group: group)
+                            .environment(vm)
+                            .cornerRadius(16)
+                    }
+                }
+                Spacer()
+            }
+
             if let selectedProduct = vm.selectedProduct {
                 StoreView(identifier: selectedProduct.identifier, dismissHandler: { success in
                     if !success {
@@ -43,17 +55,6 @@ public struct AppStoreCatalogView: View {
                     }
                     vm.selectedProduct = nil
                 })
-            } else {
-                VStack {
-                    ScrollView {
-                        ForEach (catalog.productGroups) { group in
-                            ProductGroupView(group: group)
-                                .environment(vm)
-                                .cornerRadius(16)
-                        }
-                    }
-                    Spacer()
-                }
             }
             
             Button {
@@ -64,6 +65,8 @@ public struct AppStoreCatalogView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
             .padding(8)
+            .opacity(showCloseButton ? 1 : 0)
+            .animation(.default)
         }
     }
 }
