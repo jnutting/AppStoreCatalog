@@ -7,20 +7,20 @@
 
 import Foundation
 
-struct Product: Codable, Identifiable {
-    var id: String { identifier }
-    
+struct Product: Codable, Identifiable, Hashable {
     let name: String
     let details: String
     let identifier: String
     let imageURL: URL
+
+    var id: String { identifier }
 }
 
 struct ProductGroup: Codable, Identifiable {
-    var id: String { title }
-
     let title: String
     let products: [Product]
+
+    var id: String { title }
 }
 
 struct ProductGroupsCollection: Codable {

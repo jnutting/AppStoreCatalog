@@ -7,23 +7,64 @@
 
 import SwiftUI
 
+@Observable class ViewModel {
+    var selectedProduct: Product? = nil
+    var failedProducts = Set<Product>()
+}
+
+/// A view that shows a vertically scrolling grid of the contents of an AppStoreCatalog and lets the user tap one to open a corresponding App Store page using StoreKit. On narrow screens such as an iPhone, this will be a single-column grid, but the view will adapt to show more columns on wider screens.
+/// If an optional StoreFailureHandler is passed to the initializer, it will be called if StoreKit can't successfully open a detail page for one of the identifiers in catalog. You might use this to log an error remotely, to make yourself aware that there's a problem.
 public struct AppStoreCatalogView: View {
-    let catalog: AppStoreCatalog
+    public typealias StoreFailureHandler = ((String) -> Void)?
     
+    let catalog: AppStoreCatalog
+    let storeFailureHandler: StoreFailureHandler
+
+    @State private var vm = ViewModel()
+    @Environment(\.dismiss) var dismiss
+
+    /// AppStoreCatalog initializer
+    /// - Parameters:
+    ///   - catalog: A valid instance of AppStoreCatalog
+    ///   - storeFailureHandler: An optional closure to call in case of an error occuring with StoreKit
+    public init(catalog: AppStoreCatalog, storeFailureHandler: StoreFailureHandler = nil) {
+        self.catalog = catalog
+        self.storeFailureHandler = storeFailureHandler
+    }
+
     public var body: some View {
-        VStack {
-            ScrollView {
-                ForEach (catalog.productGroups) { group in
-                    ProductGroupView(group: group)
-                        .cornerRadius(16)
+        ZStack {
+            
+            if let selectedProduct = vm.selectedProduct {
+                StoreView(identifier: selectedProduct.identifier, dismissHandler: { success in
+                    if !success {
+                        storeFailureHandler?(selectedProduct.identifier)
+                        vm.failedProducts.insert(selectedProduct)
+                    }
+                    vm.selectedProduct = nil
+                })
+            } else {
+                VStack {
+                    ScrollView {
+                        ForEach (catalog.productGroups) { group in
+                            ProductGroupView(group: group)
+                                .environment(vm)
+                                .cornerRadius(16)
+                        }
+                    }
+                    Spacer()
                 }
             }
-            Spacer()
+            
+            Button {
+                dismiss()
+            } label: {
+                Image(systemName: "xmark.circle")
+                    .imageScale(.large)
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
+            .padding(8)
         }
-    }
-    
-    public init(catalog: AppStoreCatalog) {
-        self.catalog = catalog
     }
 }
 
@@ -73,4 +114,5 @@ public struct AppStoreCatalogView: View {
     let data = Data(String(jsonString).utf8)
     let catalog = try! AppStoreCatalog(data: data)
     AppStoreCatalogView(catalog: catalog)
+        .environment(ViewModel())
 }

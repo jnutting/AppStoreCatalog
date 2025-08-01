@@ -19,7 +19,7 @@ struct ProductGroupView: View {
             ], spacing: 8) {
                 ForEach(group.products) { product in
                     ProductView(product: product)
-                        .background(Color.white)
+                        .background(Color(UIColor.systemBackground))
                         .cornerRadius(16)
                 }
             }
@@ -33,4 +33,5 @@ struct ProductGroupView: View {
 
     let group = ProductGroup(title: "Cool Group", products: [product1, product2])
     ProductGroupView(group: group)
+        .environment(ViewModel())
 }
