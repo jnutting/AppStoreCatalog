@@ -7,6 +7,17 @@
 
 import SwiftUI
 
+let errorFillColor = Color.red.opacity(0.95)
+let errorStrokeColor = Color.red
+let errorStrokeStyle = StrokeStyle(
+    lineWidth: 5,
+    lineCap: .round,
+    lineJoin: .miter,
+    miterLimit: 0,
+    dash: [5, 10],
+    dashPhase: 0
+)
+
 struct ProductView: View {
     let product: Product
     let failedIconURL = Bundle.module.url(forResource: "failedIcon", withExtension: "png")!
@@ -14,6 +25,8 @@ struct ProductView: View {
     @Environment(\.dismiss) var dismiss
 
     var body: some View {
+        var storeKitFailure = vm.failedProducts.contains(product)
+        
         VStack {
             Text(product.name)
                 .font(.headline)
@@ -36,28 +49,25 @@ struct ProductView: View {
                 }
                 .cornerRadius(16)
                 
-                if !vm.failedProducts.contains(product) {
+                ZStack {
                     Text(product.details)
-                } else {
-                    ZStack {
+                    
+                    Group {
                         RoundedRectangle(cornerRadius: 16)
-                            .fill(.red.opacity(0.9))
+                            .fill(errorFillColor)
                             .stroke(
-                                Color.red,
-                                style: StrokeStyle(
-                                    lineWidth: 5,
-                                    lineCap: .round,
-                                    lineJoin: .miter,
-                                    miterLimit: 0,
-                                    dash: [5, 10],
-                                    dashPhase: 0
-                                )
+                                errorStrokeColor,
+                                style: errorStrokeStyle
                             )
                         
                         Text("App Store doesn't know this product")
                             .foregroundStyle(.white)
                             .padding(16)
                     }
+                    .opacity(storeKitFailure ? 1 : 0)
+                    .animation(.snappy)
+                    .scaleEffect(storeKitFailure ? CGSize(width: 1.0, height: 1.0) : .init(width: 1.2, height: 1.2))
+                    .animation(.snappy)
                 }
             }
             .frame(maxHeight: 120)
