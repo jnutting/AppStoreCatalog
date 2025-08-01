@@ -9,31 +9,45 @@ import AppStoreCatalog
 import SwiftUI
 
 struct ContentView: View {
+    private let catalog: AppStoreCatalog?
+    
     @State var presentingSheet = false
     @State var presentingFullScreenCover = false
 
-    let catalog = try! AppStoreCatalog(data: Data(String(jsonString).utf8))
+    init() {
+        do {
+            let catalogUrl = Bundle.main.url(forResource: "ExampleCatalog", withExtension: "json")!
+            let data = try Data(contentsOf: catalogUrl)
+            catalog = try AppStoreCatalog(data: data)
+        } catch {
+            catalog = nil
+        }
+    }
 
     var body: some View {
-        VStack {
-            Button("Show apps using sheet") {
-                presentingSheet = true
+        if let catalog {
+            VStack {
+                Button("Show apps using sheet") {
+                    presentingSheet = true
+                }
+                Button("Show apps using full screen cover") {
+                    presentingFullScreenCover = true
+                }
             }
-            Button("Show apps using full screen cover") {
-                presentingFullScreenCover = true
+            .padding()
+            .sheet(isPresented: $presentingSheet) {
+                AppStoreCatalogView(catalog: catalog) { identifier in
+                    print("AppStoreCatalogView failed to show App Store view for product \(identifier)")
+                }
             }
-        }
-        .padding()
-        .sheet(isPresented: $presentingSheet) {
-            AppStoreCatalogView(catalog: catalog) { identifier in
-                print("AppStoreCatalogView failed to show App Store view for product \(identifier)")
+            .fullScreenCover(isPresented: $presentingFullScreenCover) {
+                AppStoreCatalogView(catalog: catalog,
+                                    enableCloseButton: true) { identifier in
+                    print("AppStoreCatalogView failed to show App Store view for product \(identifier)")
+                }
             }
-        }
-        .fullScreenCover(isPresented: $presentingFullScreenCover) {
-            AppStoreCatalogView(catalog: catalog,
-                                enableCloseButton: true) { identifier in
-                print("AppStoreCatalogView failed to show App Store view for product \(identifier)")
-            }
+        } else {
+            Text("Failed to initialize AppStoreCatalog!")
         }
     }
 }
@@ -41,52 +55,3 @@ struct ContentView: View {
 #Preview {
     ContentView()
 }
-
-let jsonString = """
-{ "productGroups" : [
-{   "title" : "Awesome Games",
-    "products" : [
-        {
-            "name" : "FlippyBit",
-            "details" : "Party like it's 1979! Flippy Bit makes one of 2014's biggest mobile hits look like it's on an old Atari.",
-            "identifier" : "825459863",
-            "imageURL" : "https://rebisoft.com/appicons/flippybit512.png"
-        },
-        {
-            "name" : "Not a real app",
-            "details" : "Tap on this to see what happens when we give StoreKit an invalid identifier and it can't show its page.",
-            "identifier" : "111",
-            "imageURL" : "https://rebisoft.com/appicons/flippybit512.png"
-        },
-        {
-            "name" : "Another fake app",
-            "details" : "This one doesn't even have a functioning image. You'll see the placeholder in use instead.",
-            "identifier" : "222",
-            "imageURL" : "https://awuefhaiwhfjasdjgoasdkjfa.com/a.png"
-        },
-        {
-            "name" : "Scribattle",
-            "details" : "Put your finger-flicking abilities to the test in this all-but-forgotten 2009 App Store hit game!",
-            "identifier" : "301618970",
-            "imageURL" : "https://rebisoft.com/appicons/scribattle100.png"
-        },
-    ]
-},
-{   "title" : "Other Apps",
-    "products" : [
-        {
-            "name" : "Goldy",
-            "details" : "Goldy is a web browser for iPhone, iPad, and iPod touch that offers one simple feature: Privacy.",
-            "identifier" : "417317449",
-            "imageURL" : "https://rebisoft.com/_Media/screen_shot_2011-08-19_at_med.png"
-        },
-        {
-            "name" : "Goldy",
-            "details" : "Goldy is a web browser for iPhone, iPad, and iPod touch that offers one simple feature: Privacy.",
-            "identifier" : "417317449x",
-            "imageURL" : "https://rebisoft.com/_Media/screen_shot_2011-08-19_at_med.png"
-        },
-    ]
-},
-]}
-"""
