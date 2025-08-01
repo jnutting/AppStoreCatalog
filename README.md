@@ -31,7 +31,7 @@ you like. This can be used to promote not only your own companies apps, but also
 groups of apps belonging to clients or friends, or just any apps you like for
 any reason :)
 
-In the ancient way of doing things that SKStoreProductViewController used to
+In the ancient way of doing things that `SKStoreProductViewController` used to
 provide, you just provided a company identifier, and StoreKit did the rest.
 Since that's not really feasible from the client side using public APIs,
 AppStoreCatalog requires you to provide four pieces of data for each app you
@@ -125,7 +125,7 @@ When you want to display the view, do something like this:
 
 ```
 
-It's also possible to choose whether or not AppStoreCatalogView will include a
+It's also possible to choose whether or not `AppStoreCatalogView` will include a
 close button, which is not typically necessary for presentation within a Sheet,
 but is definitely useful for a full screen presentation. See the included
 example application for full usage details and examples.
@@ -136,7 +136,7 @@ Additional notes
 Tapping on a displayed product will attempt to display StoreKit's purchase page
 for that product. If the product's identifier is invalid or cannot be found on
 the app store for any reason, a message will be displayed to the user. You can
-also give AppStoreCatalogView a closure to be called whenever this happens, in
+also give `AppStoreCatalogView` a closure to be called whenever this happens, in
 case you want to log this in some way.
 
 Due to StoreKit limitations, every attempt to display a purchase page fails when
