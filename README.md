@@ -45,10 +45,10 @@ How it looks:
 -----
 
 Here's the iPhone layout, presented with `.sheet()`:
-![screenshot](https://raw.github.com/jnutting/AppStoreCatalog/Screens/iPhone-screenshot.png)
+![screenshot](https://raw.githubusercontent.com/jnutting/AppStoreCatalog/refs/heads/main/Screens/iPhone-screenshot.png)
 
 Here's the iPad layout, presented with `.fullScreenCover()`:
-![screenshot](https://raw.github.com/jnutting/AppStoreCatalog/Screens/iPad-screenshot.png)
+![screenshot](https://raw.githubusercontent.com/jnutting/AppStoreCatalog/refs/heads/main/Screens/iPad-screenshot.png)
 
 Usage:
 -----
