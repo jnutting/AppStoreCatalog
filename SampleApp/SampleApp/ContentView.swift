@@ -10,19 +10,29 @@ import SwiftUI
 
 struct ContentView: View {
     @State var presentingSheet = false
+    @State var presentingFullScreenCover = false
 
     let catalog = try! AppStoreCatalog(data: Data(String(jsonString).utf8))
 
     var body: some View {
         VStack {
-            Button("Show me the apps!") {
+            Button("Show apps using sheet") {
                 presentingSheet = true
+            }
+            Button("Show apps using full screen cover") {
+                presentingFullScreenCover = true
             }
         }
         .padding()
-        .fullScreenCover(isPresented: $presentingSheet) {
+        .sheet(isPresented: $presentingSheet) {
             AppStoreCatalogView(catalog: catalog) { identifier in
-                print("AppStoreCatalogView failed show App Store view for product \(identifier)")
+                print("AppStoreCatalogView failed to show App Store view for product \(identifier)")
+            }
+        }
+        .fullScreenCover(isPresented: $presentingFullScreenCover) {
+            AppStoreCatalogView(catalog: catalog,
+                                enableCloseButton: true) { identifier in
+                print("AppStoreCatalogView failed to show App Store view for product \(identifier)")
             }
         }
     }

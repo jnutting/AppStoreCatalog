@@ -13,11 +13,13 @@ import SwiftUI
 }
 
 /// A view that shows a vertically scrolling grid of the contents of an AppStoreCatalog and lets the user tap one to open a corresponding App Store page using StoreKit. On narrow screens such as an iPhone, this will be a single-column grid, but the view will adapt to show more columns on wider screens.
+/// Depending on how this view is displayed in an app, it may or may not be desirable to have a floating close button in the upper right corner to dismiss it. This can be enabled with the `enableCloseButton` parameter. 
 /// If an optional StoreFailureHandler is passed to the initializer, it will be called if StoreKit can't successfully open a detail page for one of the identifiers in catalog. You might use this to log an error remotely, to make yourself aware that there's a problem.
 public struct AppStoreCatalogView: View {
     public typealias StoreFailureHandler = ((String) -> Void)?
     
     let catalog: AppStoreCatalog
+    let enableCloseButton: Bool
     let storeFailureHandler: StoreFailureHandler
 
     @State private var vm = ViewModel()
@@ -26,9 +28,13 @@ public struct AppStoreCatalogView: View {
     /// AppStoreCatalog initializer
     /// - Parameters:
     ///   - catalog: A valid instance of AppStoreCatalog
+    ///   - enableCloseButton: Set this to `true` to include a floating close button
     ///   - storeFailureHandler: An optional closure to call in case of an error occuring with StoreKit
-    public init(catalog: AppStoreCatalog, storeFailureHandler: StoreFailureHandler = nil) {
+    public init(catalog: AppStoreCatalog,
+                enableCloseButton: Bool = false,
+                storeFailureHandler: StoreFailureHandler = nil) {
         self.catalog = catalog
+        self.enableCloseButton = enableCloseButton
         self.storeFailureHandler = storeFailureHandler
     }
 
@@ -57,16 +63,18 @@ public struct AppStoreCatalogView: View {
                 })
             }
             
-            Button {
-                dismiss()
-            } label: {
-                Image(systemName: "xmark.circle")
-                    .imageScale(.large)
+            if (enableCloseButton) {
+                Button {
+                    dismiss()
+                } label: {
+                    Image(systemName: "xmark.circle")
+                        .imageScale(.large)
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
+                .padding(8)
+                .opacity(showCloseButton ? 1 : 0)
+                .animation(.default)
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
-            .padding(8)
-            .opacity(showCloseButton ? 1 : 0)
-            .animation(.default)
         }
     }
 }
