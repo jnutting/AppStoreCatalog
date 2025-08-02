@@ -7,6 +7,12 @@
 
 import SwiftUI
 
+#if canImport(UIKit)
+let backgroundColor = Color(UIColor.systemBackground)
+#elseif canImport(AppKit)
+let backgroundColor = Color(NSColor.windowBackgroundColor)
+#endif
+
 struct ProductGroupView: View {
     let group: ProductGroup
     
@@ -18,7 +24,7 @@ struct ProductGroupView: View {
                       spacing: 8) {
                 ForEach(group.products) { product in
                     ProductView(product: product)
-                        .background(Color(UIColor.systemBackground))
+                        .background(backgroundColor)
                         .cornerRadius(16)
                 }
             }

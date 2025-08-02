@@ -54,7 +54,7 @@ public struct AppStoreCatalogView: View {
             }
 
             if let selectedProduct = vm.selectedProduct {
-                StoreView(identifier: selectedProduct.identifier, dismissHandler: { success in
+                StoreView(productIdentifier: selectedProduct.identifier, dismissHandler: { success in
                     if !success {
                         storeFailureHandler?(selectedProduct.identifier)
                         vm.failedProducts.insert(selectedProduct)

@@ -144,4 +144,8 @@ case you want to log this in some way.
 
 Due to StoreKit limitations, every attempt to display a purchase page fails when
 running in the Simulator, so you'll see the failure message for every product.
-Run on a device to see it actually work. 
+Run on a device to see it actually work.
+
+AppStoreCatalog builds and runs on macOS, but it doesn't seem to function quite
+correctly as of yet. This may be fixed in the future, but for now, consider the
+macOS support here "experimental". Pull requests to improve this are welcome!
