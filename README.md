@@ -33,7 +33,7 @@ Instead of just imitating the old behavior (which no one has seen in well over
 a decade), AppStoreCatalog improves upon it by showing a larger icon, and giving
 the user the ability to include a small piece of text for each app. It also lets
 you pick exactly which apps you want to show, and group them together in any way
-you like. This can be used to promote not only your own companies apps, but also
+you like. This can be used to promote not only your own company's apps, but also
 groups of apps belonging to clients or friends, or just any apps you like for
 any reason :)
 
@@ -41,7 +41,7 @@ In the ancient way of doing things that `SKStoreProductViewController` used to
 provide, you just provided a company identifier, and StoreKit did the rest.
 Since that's not really feasible from the client side using public APIs,
 AppStoreCatalog requires you to provide four pieces of data for each app you
-want to show: A name, an App Store identifier, anicon URL, and a text string
+want to show: A name, an App Store identifier, an icon URL, and a string
 containing a brief description.
 
 The configuration can be easily specified using JSON data, as described later
