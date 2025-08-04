@@ -112,7 +112,8 @@ Prepare the catalog data somewhere:
     // snippet! 
     let data = try! Data(contentsOf: Bundle.main.url(forResource: "ExampleCatalog", withExtension: "json")!)
     // ... or ...
-    let data = Data(url: URL("https://sample.com/all_products.json")!)
+    let url = URL(string: "https://sample.com/all_products.json")!
+    let (data, response) = try await URLSession.shared.data(from: url)
     
     let catalog = try! AppStoreCatalog(data: data) 
 ```
