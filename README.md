@@ -14,6 +14,9 @@ more columns.
 This project is a SwiftUI rewrite/replacement of an older package called 
 [MultiProductViewer](https://github.com/jnutting/MultiProductViewer).
 
+![screenshot](https://raw.githubusercontent.com/jnutting/AppStoreCatalog/refs/heads/main/Screens/ScreenRecording.gif)
+
+
 Background:
 -----
 
