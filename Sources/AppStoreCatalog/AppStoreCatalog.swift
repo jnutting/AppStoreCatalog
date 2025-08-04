@@ -11,7 +11,7 @@ import Foundation
 /// Passing in an optional `excluding identifier` will discard one item from the catalog. This lets you e.g. host a single JSON resource somewhere containing a catalog of all your apps, and have the resulting catalog exclude the app it's running in by passing in the app's own identifier.
 /// Each item within a product group must have a unique identifier. If you use duplicate identifiers, behavior is undefined (you will probably see some "empty cells" in the AppStoreCatalogView display).
 /// Any empty product groups in the given will be left out from the resulting AppStoreCatalog.
-public struct AppStoreCatalog {
+public struct AppStoreCatalog: Sendable {
     let productGroups: [ProductGroup]
     
     /// AppStoreCatalog initializer. This liminates any occurrences of the  optional app ID to exclude, and eliminates any product groups with an empty product array.

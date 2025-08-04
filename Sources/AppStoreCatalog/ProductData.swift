@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Product: Codable, Identifiable, Hashable {
+struct Product: Codable, Identifiable, Hashable, Sendable {
     let name: String
     let details: String
     let identifier: String
@@ -16,13 +16,13 @@ struct Product: Codable, Identifiable, Hashable {
     var id: String { identifier }
 }
 
-struct ProductGroup: Codable, Identifiable {
+struct ProductGroup: Codable, Identifiable, Sendable {
     let title: String
     let products: [Product]
 
     var id: String { title }
 }
 
-struct ProductGroupsCollection: Codable {
+struct ProductGroupsCollection: Codable, Sendable {
     let productGroups: [ProductGroup]
 }
