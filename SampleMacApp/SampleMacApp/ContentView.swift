@@ -33,8 +33,8 @@ struct ContentView: View {
             .padding()
             .sheet(isPresented: $presentingSheet) {
                 AppStoreCatalogView(catalog: catalog,
-                                    enableCloseButton: true) { identifier in
-                    print("AppStoreCatalogView failed to show App Store view for product \(identifier)")
+                                    enableCloseButton: true) { identifier, error in
+                    print("AppStoreCatalogView failed to show App Store view for product \(identifier):\n\(error.localizedDescription)")
                 }
             }
         } else {

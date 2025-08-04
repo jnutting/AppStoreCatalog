@@ -113,7 +113,8 @@ Prepare the catalog data somewhere:
 ```
     // In production code, please do better than just "try!" as shown in this
     // snippet! 
-    let data = try! Data(contentsOf: Bundle.main.url(forResource: "ExampleCatalog", withExtension: "json")!)
+    let data = try! Data(contentsOf: Bundle.main.url(forResource: "ExampleCatalog",
+                                                     withExtension: "json")!)
     // ... or ...
     let url = URL(string: "https://sample.com/all_products.json")!
     let (data, response) = try await URLSession.shared.data(from: url)
@@ -121,19 +122,21 @@ Prepare the catalog data somewhere:
     let catalog = try! AppStoreCatalog(data: data) 
 ```
 
-When you want to display the view, do something like this:
+When you want to display the view, do something like this. The closure is
+optional; If it's provided, it will be called any time StoreKit fails to show
+a product page.
 ```
     // assuming the existence of `@State var presentingSheet`...
     .sheet(isPresented: $presentingSheet) {
-        AppStoreCatalogView(catalog: catalog) { identifier in
-            print("AppStoreCatalogView failed to show App Store view for product \(identifier)")
+        AppStoreCatalogView(catalog: catalog) { identifier, error in
+            print("AppStoreCatalogView failed to show App Store view for product \(identifier):\n\(error.localizedDescription)")
         }
     }
 
 ```
 
 It's also possible to choose whether or not `AppStoreCatalogView` will include a
-close button, which is not typically necessary for presentation within a Sheet,
+close button. This is not typically necessary for presentation within a Sheet,
 but is definitely useful for a full screen presentation. See the included
 example application for full usage details and examples.
 
@@ -151,5 +154,7 @@ running in the Simulator, so you'll see the failure message for every product.
 Run on a device to see it actually work.
 
 AppStoreCatalog builds and runs on macOS, but it doesn't seem to function quite
-correctly as of yet. This may be fixed in the future, but for now, consider the
-macOS support here "experimental". Pull requests to improve this are welcome!
+correctly as of yet, probably due to the maintainer's lack of experience with
+the macOS incarnation of SwiftUI. This may be fixed in the future, but for now,
+consider the macOS support here "experimental". Pull requests to improve this,
+or any other aspect of this package, are welcome!
