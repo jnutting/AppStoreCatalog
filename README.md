@@ -24,18 +24,20 @@ This functionality was originally (in iOS 5 and iOS 6) implemented by
 `SKStoreProductViewController` itself. You could just pass it your company
 identifier, and it would present all of your company's products in a list, and
 let the user drill down to get more info and purchase apps. That functionality
-was removed in iOS 7, so the AppStoreCatalog package was created to add it back.
+stopped working in iOS 7 due to a bug; It was later restored in iOS 8, but by
+that time I had already created my own library, the now defunct 
+MultiProductViewer, which was more flexible and useful than Apple's own. 
+AppStoreCatalog is a re-implementation which does even more.
 
 What it does:
 -----
 
-Instead of just imitating the old behavior (which no one has seen in well over
-a decade), AppStoreCatalog improves upon it by showing a larger icon, and giving
-the user the ability to include a small piece of text for each app. It also lets
-you pick exactly which apps you want to show, and group them together in any way
-you like. This can be used to promote not only your own company's apps, but also
-groups of apps belonging to clients or friends, or just any apps you like for
-any reason :)
+Instead of just imitating the old behavior, AppStoreCatalog improves upon it by
+showing a larger icon, and giving the user the ability to include a small piece
+of text for each app. It also lets you pick exactly which apps you want to show
+by supplying multiple lists of your own. This can be used to promote not only
+your own company's apps, but also groups of apps belonging to clients or
+friends, or just any apps you like for any reason :)
 
 In the ancient way of doing things that `SKStoreProductViewController` used to
 provide, you just provided a company identifier, and StoreKit did the rest.
