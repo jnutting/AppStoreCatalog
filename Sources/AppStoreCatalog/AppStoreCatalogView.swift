@@ -13,10 +13,17 @@ import SwiftUI
     var failedProducts = Set<Product>()
 }
 
-/// A view that shows a vertically scrolling grid of the contents of an AppStoreCatalog and lets the user tap one to open a corresponding App Store page using StoreKit. On narrow screens such as an iPhone, this will be a single-column grid, but the view will adapt to show more columns on wider screens.
-/// Depending on how this view is displayed in an app, it may or may not be desirable to have a floating close button in the upper right corner to dismiss it. This can be enabled with the `enableCloseButton` parameter. 
-/// If an optional ProductFailureHandler is passed to the initializer, it will be called if StoreKit can't successfully open a detail page for one of the identifiers in `catalog`. You might use this to log an error remotely, to make yourself aware that there's a problem.
+/**
+ A view that shows the contents of an ``AppStoreCatalog`` in a vertically scrolling grid, and lets the user tap one to open a corresponding App Store page using StoreKit.
+ 
+ On narrow screens such as an iPhone, `AppStoreCatalogView` will show a single-column grid, but the view will adapt to show more columns on wider screens.
+
+ Depending on how this view is displayed in an app, it may or may not be desirable to have a floating close-button in the upper right corner to dismiss it. This can be enabled with the `enableCloseButton` parameter.
+
+ If an optional ``ProductFailureHandler`` is passed to the initializer, it will be called if StoreKit can't successfully open a detail page for one of the identifiers in the given ``AppStoreCatalog``. You might use this to log an error remotely, in order to alert yourself to the problem.
+ */
 public struct AppStoreCatalogView: View {
+    /// A closure or function that takes a string containing a product identifier an an `SKError` instance
     public typealias ProductFailureHandler = ((String, SKError) -> Void)
     
     let catalog: AppStoreCatalog
@@ -28,9 +35,9 @@ public struct AppStoreCatalogView: View {
 
     /// AppStoreCatalog initializer
     /// - Parameters:
-    ///   - catalog: A valid instance of AppStoreCatalog
-    ///   - enableCloseButton: Set this to `true` to include a floating close button
-    ///   - productFailureHandler: An optional closure to call in case of an error occuring with StoreKit
+    ///   - catalog: A valid instance of ``AppStoreCatalog``
+    ///   - enableCloseButton: Set this to `true` if the display should include a floating close-button.
+    ///   - productFailureHandler: An optional closure to call in case of an error occuring with StoreKit. This may be called multiple times; one time for each "cell" that generates an error when the user taps on it.
     public init(catalog: AppStoreCatalog,
                 enableCloseButton: Bool = false,
                 productFailureHandler: ProductFailureHandler? = nil) {

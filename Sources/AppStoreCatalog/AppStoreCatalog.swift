@@ -7,29 +7,12 @@
 
 import Foundation
 
-/// A struct representing an array of product groups, each containing an array of products. See bottom of this file for corresponding JSON example.
-/// Passing in an optional `excluding identifier` will discard one item from the catalog. This lets you e.g. host a single JSON resource somewhere containing a catalog of all your apps, and have the resulting catalog exclude the app it's running in by passing in the app's own identifier.
-/// Each item within a product group must have a unique identifier. If you use duplicate identifiers, behavior is undefined (you will probably see some "empty cells" in the AppStoreCatalogView display).
-/// Any empty product groups in the given will be left out from the resulting AppStoreCatalog.
-public struct AppStoreCatalog: Sendable {
-    let productGroups: [ProductGroup]
-    
-    /// AppStoreCatalog initializer. This liminates any occurrences of the  optional app ID to exclude, and eliminates any product groups with an empty product array.
-    /// Throws potential decoding errors from JSONDecoder.
-    /// - Parameters:
-    ///   - data: A Data instance containing JSON data describing the products and groups
-    ///   - identifier: Optionally exclude a single identifier.
-    public init(data: Data, excluding identifier: String? = nil) throws {
-        let collection = try JSONDecoder().decode(ProductGroupsCollection.self, from: data)
-        productGroups = collection.productGroups.map { group in
-            return ProductGroup(title: group.title,
-                                products: group.products.filter { $0.id != identifier })
-        }
-        .filter { !$0.products.isEmpty }
-    }
-}
-
-/* Example JSON containing a couple of product groups, each with a number of products
+/**
+ `AppStoreCatalog` is a struct representing an array of product groups, each containing an array of products.
+ 
+ `AppStoreCatalog` must be initialized with a `Data` object containing JSON in a particular structure. The following example contains a couple of product groups, each with a number of products:
+ 
+ ```json
  { "productGroups" : [
      {   "title" : "Awesome Games",
          "products" : [
@@ -58,4 +41,37 @@ public struct AppStoreCatalog: Sendable {
          ]
      },
  ]}
+ ```
+
+ An optional parameter allows you to omit one item from the catalog. This lets you e.g. host a single JSON resource somewhere containing a catalog of all your apps, and have the resulting catalog exclude the app it's running in by passing in the app's own identifier.
+
+ Each item within a product group must have a unique identifier, corresponding to the identifier used in the App Store for a particular product. If you use duplicate identifiers within a product group, behavior is undefined (you will probably see some "empty cells" in the ``AppStoreCatalogView`` display).
+
+ Any empty product groups will be left out from the resulting AppStoreCatalog, including product groups that are made empty through omitting the `excluding` parameter.
  */
+public struct AppStoreCatalog: Sendable {
+    public enum DataError: Error {
+        case emptyProductGroups
+    }
+    
+    let productGroups: [ProductGroup]
+    
+    /// The initializer's `data` parameter must be a JSON object containing an array of "productGroups", each of which has a "title" and an array of "products", as shown in the ``AppStoreCatalog`` documentation. The initializer eliminates any occurrences of the optional `excluding` identifier, and eliminates any product groups with an empty product array.
+    ///
+    /// - Parameters:
+    ///   - data: A Data instance containing JSON data describing the products and groups
+    ///   - identifier: A single product identifier, which if present in `data` will be omitted from the catalog.
+    ///
+    /// - Throws: Any JSON parsing/decoding errors from JSONDecoder will be thrown. Also, after considering the optional `excluding` identifier and all any product groups containing an empty array of products, if there are no populated product groups remaining, an `AppStoreCatalog.DataError.emptyProductGroups` error will be thrown.
+    public init(data: Data, excluding identifier: String? = nil) throws {
+        let collection = try JSONDecoder().decode(ProductGroupsCollection.self, from: data)
+        productGroups = collection.productGroups.map { group in
+            return ProductGroup(title: group.title,
+                                products: group.products.filter { $0.id != identifier })
+        }
+        .filter { !$0.products.isEmpty }
+        guard !productGroups.isEmpty else {
+            throw DataError.emptyProductGroups
+        }
+    }
+}

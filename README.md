@@ -39,8 +39,8 @@ by supplying multiple lists of your own. This can be used to promote not only
 your own company's apps, but also groups of apps belonging to clients or
 friends, or just any apps you like for any reason :)
 
-In the ancient way of doing things that `SKStoreProductViewController` used to
-provide, you just provided a company identifier, and StoreKit did the rest.
+In the simplistic way of doing things that `SKStoreProductViewController` 
+includes, you just provide a company identifier, and StoreKit does the rest.
 Since that's not really feasible from the client side using public APIs,
 AppStoreCatalog requires you to provide four pieces of data for each app you
 want to show: A name, an App Store identifier, an icon URL, and a string
