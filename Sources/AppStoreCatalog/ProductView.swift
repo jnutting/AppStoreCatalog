@@ -25,7 +25,7 @@ struct ProductView: View {
     @Environment(\.dismiss) var dismiss
 
     var body: some View {
-        var storeKitFailure = vm.failedProducts.contains(product)
+        let storeKitFailure = vm.failedProducts.contains(product)
         
         VStack {
             Text(product.name)
@@ -68,9 +68,9 @@ struct ProductView: View {
                         .padding(16)
                 }
                 .opacity(storeKitFailure ? 1 : 0)
-                .animation(.snappy)
+                .animation(.snappy, value: storeKitFailure)
                 .scaleEffect(storeKitFailure ? CGSize(width: 1.0, height: 1.0) : .init(width: 1.2, height: 1.2))
-                .animation(.snappy)
+                .animation(.snappy, value: storeKitFailure)
                 
             }
             .frame(maxHeight: 120)

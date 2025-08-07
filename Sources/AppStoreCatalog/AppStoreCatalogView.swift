@@ -40,7 +40,7 @@ public struct AppStoreCatalogView: View {
     }
 
     public var body: some View {
-        var showCloseButton = vm.selectedProduct == nil
+        let showCloseButton = vm.selectedProduct == nil
         
         ZStack {
             VStack {
@@ -74,7 +74,7 @@ public struct AppStoreCatalogView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
                 .padding(8)
                 .opacity(showCloseButton ? 1 : 0)
-                .animation(.default)
+                .animation(.default, value: showCloseButton)
             }
         }
     }
